@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -35,9 +34,12 @@ class _LoginFormState extends State<LoginForm> {
         children: <Widget>[
           TextFormField(
             controller: _usernameController,
-            decoration: InputDecoration(labelText: 'Username'),
+            decoration: InputDecoration(
+              labelText: 'Username',
+              border: InputBorder.none,
+            ),
             validator: (value) {
-              if (value==null||value.isEmpty) {
+              if (value == null || value.isEmpty) {
                 return 'Please enter your username';
               }
               return null;
@@ -45,10 +47,27 @@ class _LoginFormState extends State<LoginForm> {
           ),
           TextFormField(
             controller: _passwordController,
-            decoration: InputDecoration(labelText: 'Password'),
+            decoration: InputDecoration(
+              labelText: 'Password',
+              border: InputBorder.none,
+            ),
             obscureText: true,
             validator: (value) {
-              if (value==null||value.isEmpty) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your password';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
+            controller: _passwordController,
+            decoration: InputDecoration(
+              labelText: 'Confirm Password',
+              border: InputBorder.none,
+            ),
+            obscureText: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
                 return 'Please enter your password';
               }
               return null;
@@ -58,12 +77,8 @@ class _LoginFormState extends State<LoginForm> {
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                // Perform login
                 String username = _usernameController.text;
                 String password = _passwordController.text;
-                // Handle login logic here
-                // For example, you might call a function to authenticate user credentials
-                // Once authenticated, you can navigate to another screen or perform other actions
               }
             },
             child: Text('Login'),
