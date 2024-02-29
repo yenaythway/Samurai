@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:real_time_chatting/Pages/home_page.dart';
+import 'package:real_time_chatting/Pages/login.dart';
 import 'package:real_time_chatting/Pages/sign_in_page.dart';
 import 'package:real_time_chatting/Pages/sign_up_page.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Home(),
+      home: LoginPage(),
     );
   }
 }

@@ -12,39 +12,37 @@ class Home extends StatelessWidget {
           children: [
             Text("Hello"),
             Text("Jordan"),
-            Column(
-              children: [
-                TabBar(
-                    controller: TabController(length: length, vsync: vsync),
-                    tabs: [
-                      Container(
-                        decoration: BoxDecoration(color: Colors.blue),
-                        child: Text("data"),
-                      )
-                    ]),
-                // TabBarView(
-                //   children: <Widget>[
-                //     Center(
-                //       child: Text("Group"),
-                //     ),
-                //     // Center(
-                //     //   child: Text(""),
-                //     // ),
-                //     // Center(
-                //     //   child: Text(""),
-                //     // ),
-                //   ],
-                // )
-              ],
-            )
+            // Column(
+            //   children: [
+            //     TabBar(
+            //         controller: TabController(length: , 2vsync: vsync),
+            //         tabs: [
+            //           Container(
+            //             decoration: BoxDecoration(color: Colors.blue),
+            //             child: Text("data"),
+            //           )
+            //         ]),
+            //     // TabBarView(
+            //     //   children: <Widget>[
+            //     //     Center(
+            //     //       child: Text("Group"),
+            //     //     ),
+            //     //     // Center(
+            //     //     //   child: Text(""),
+            //     //     // ),
+            //     //     // Center(
+            //     //     //   child: Text(""),
+            //     //     // ),
+            //     //   ],
+            //     // )
+            //   ],
+            // )
             // Stack(children: [
             //   Container(
             //     width: double.infinity,
             //     decoration: BoxDecoration(color: Colors.grey),
             //   ),
-
             // ]),
-
             // Expanded(
             //     child: ListView.builder(
             //         itemBuilder: ((context, index) => Container()))),
