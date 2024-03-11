@@ -21,15 +21,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: LoginProvider()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.black,
-          // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: SignUpPage(),
-      ),
+          title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: Colors.black,
+            // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: Image.asset(
+            "assets/login.png",
+            fit: BoxFit.cover,
+          ) //SignUpPage(),
+          ),
     );
   }
 }

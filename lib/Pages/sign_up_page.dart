@@ -8,7 +8,14 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SuperScaffold(body: const SignUpForm());
+    return SuperScaffold(
+        body: Stack(children: [
+      Image.asset(
+        "assets/login.png",
+        fit: BoxFit.cover,
+      ),
+      const SignUpForm()
+    ]));
   }
 }
 
@@ -26,13 +33,11 @@ class SignUpForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           TextFormField(
-            
             controller: loginProvider.usernameController,
             decoration: InputDecoration(
               labelText: 'Username',
-              focusedBorder: ,
-              
-              border: OutlineInputBorder(borderSide: bo),
+              focusedBorder: OutlineInputBorder(borderSide: BorderSide()),
+              border: OutlineInputBorder(borderSide: BorderSide()),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
