@@ -28,10 +28,11 @@ class MyApp extends StatelessWidget {
             // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          home: Image.asset(
-            "assets/login.png",
-            fit: BoxFit.cover,
-          ) //SignUpPage(),
+          home: SignUpPage()
+          //     Image.asset(
+          //   "assets/login.png",
+          //   fit: BoxFit.cover,
+          // ) //SignUpPage(),
           ),
     );
   }
