@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +35,7 @@ class SignUpForm extends StatelessWidget {
                   "assets/login.png",
                 ))),
         child: SuperScaffold(
+          resizeToAvoidBottomInset: true,
           backgroundColor: Colors.transparent,
           body: Form(
             key: formKey,
@@ -40,9 +43,10 @@ class SignUpForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TextFormField(
+                  // keyboardType: TextInputType.number,
                   controller: loginProvider.usernameController,
                   decoration: const InputDecoration(
-                    labelText: 'Username',
+                    labelText: 'Name',
                     focusedBorder: OutlineInputBorder(borderSide: BorderSide()),
                     border: OutlineInputBorder(borderSide: BorderSide()),
                   ),
@@ -53,11 +57,13 @@ class SignUpForm extends StatelessWidget {
                     return null;
                   },
                 ),
+                SizedBox(height: 20),
                 TextFormField(
-                  controller: loginProvider.passwordController,
+                  controller: loginProvider.pswController,
                   decoration: const InputDecoration(
                     labelText: 'Password',
-                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide()),
+                    border: OutlineInputBorder(borderSide: BorderSide()),
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -67,24 +73,32 @@ class SignUpForm extends StatelessWidget {
                     return null;
                   },
                 ),
+                SizedBox(height: 20),
                 TextFormField(
-                  controller: loginProvider.passwordController,
+                  controller: loginProvider.confpswController,
                   decoration: const InputDecoration(
                     labelText: 'Confirm Password',
-                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide()),
+                    border: OutlineInputBorder(borderSide: BorderSide()),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your password';
                     }
+                    if (loginProvider.pswController.text !=
+                        loginProvider.confpswController.text) {
+                      return "Password not same";
+                    }
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
-                    if (formKey.currentState!.validate()) {}
+                    if (formKey.currentState!.validate()) {
+                      loginProvider.createAccountToAgora();
+                    }
                   },
                   child: Container(
                       alignment: Alignment.center,
