@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "863838160927",
+    "project_id": "my-first-project-56712",
+    "storage_bucket": "my-first-project-56712.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863838160927:android:a125ad610892f180072d2a",
+        "android_client_info": {
+          "package_name": "com.example.firebase_setup_for_android_emulator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863838160927-u200o1c2jkv9di9pt9h22jfqkhkd0k5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEmab4w2b0egq4vPExxlLQMRgGp-DeiBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863838160927-u200o1c2jkv9di9pt9h22jfqkhkd0k5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863838160927:android:3491b3b862110910072d2a",
+        "android_client_info": {
+          "package_name": "com.example.real_time_chatting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863838160927-u200o1c2jkv9di9pt9h22jfqkhkd0k5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEmab4w2b0egq4vPExxlLQMRgGp-DeiBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863838160927-u200o1c2jkv9di9pt9h22jfqkhkd0k5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
