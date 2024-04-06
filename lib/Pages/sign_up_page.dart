@@ -57,7 +57,7 @@ class SignUpForm extends StatelessWidget {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: loginProvider.pswController,
                   decoration: const InputDecoration(
@@ -73,7 +73,7 @@ class SignUpForm extends StatelessWidget {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: loginProvider.confpswController,
                   decoration: const InputDecoration(
@@ -93,17 +93,17 @@ class SignUpForm extends StatelessWidget {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
                     if (formKey.currentState!.validate()) {
-                      loginProvider.createAccountToAgora();
+                      loginProvider.signUp();
                     }
                   },
                   child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(color: Colors.white),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      decoration: const BoxDecoration(color: Colors.white),
                       width: double.infinity,
                       child: const Text(
                         'Sign Up',

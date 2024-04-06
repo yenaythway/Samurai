@@ -37,6 +37,7 @@ class LoginProvider extends ChangeNotifier {
       final result = json.decode(response.body);
       if (result["entities"].toString().isNotEmpty) {
         final bool msg = result["entities"][0]["activated"];
+        debugPrint("msg$msg");
         return msg;
       }
     }
@@ -50,11 +51,15 @@ class LoginProvider extends ChangeNotifier {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
+      debugPrint('result-$result');
       return result;
     }
     return "";
   }
 
-  void signUp() {}
+  void signUp() {
+    createAccountToAgora();
+  }
+
   void signIn() {}
 }
