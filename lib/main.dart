@@ -32,14 +32,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primaryColor: Colors.black,
             // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            textTheme: const TextTheme(
+              bodyMedium: TextStyle(color: Colors.white),
+            ),
             useMaterial3: true,
           ),
-          home: SignUpPage()
-          //     Image.asset(
-          //   "assets/login.png",
-          //   fit: BoxFit.cover,
-          // ) //SignUpPage(),
-          ),
+          home: const SignUpPage()),
     );
   }
 }
