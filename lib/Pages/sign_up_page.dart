@@ -1,12 +1,10 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:real_time_chatting/Pages/sign_in_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/extension.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
+import 'package:real_time_chatting/Widgets/custom_text_form_field.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
@@ -15,7 +13,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
-    final formKey = GlobalKey<FormState>();
+
     return SafeArea(
       child: Container(
         decoration: const BoxDecoration(
@@ -27,7 +25,7 @@ class SignUpPage extends StatelessWidget {
         child: SuperScaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
-          body: SignUpForm(formKey: formKey, loginProvider: loginProvider),
+          body: SignUpForm(loginProvider: loginProvider),
         ),
       ),
     );
@@ -37,15 +35,14 @@ class SignUpPage extends StatelessWidget {
 class SignUpForm extends StatelessWidget {
   const SignUpForm({
     super.key,
-    required this.formKey,
     required this.loginProvider,
   });
 
-  final GlobalKey<FormState> formKey;
   final LoginProvider loginProvider;
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,
       child: Padding(
@@ -54,10 +51,10 @@ class SignUpForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Selector<LoginProvider, String>(
-              selector: (context, counterModel) => counterModel.mailError,
+              selector: (context, _) => _.mailError,
               builder: (context, e, _) {
                 return CustomTextField(
-                  name: "Gmail",
+                  labelText: "Gmail",
                   controller: loginProvider.emailController,
                   errorText: e,
                   validator: (value) => loginProvider.validateEmail(value),
@@ -65,10 +62,10 @@ class SignUpForm extends StatelessWidget {
               },
             ),
             Selector<LoginProvider, String>(
-              selector: (context, counterModel) => counterModel.pswError,
+              selector: (context, _) => _.pswError,
               builder: (context, e, _) {
                 return CustomTextField(
-                  name: "Passowrd",
+                  labelText: "Passowrd",
                   obscureText: true,
                   errorText: e,
                   controller: loginProvider.pswController,
@@ -77,10 +74,10 @@ class SignUpForm extends StatelessWidget {
               },
             ),
             Selector<LoginProvider, String>(
-              selector: (context, counterModel) => counterModel.confError,
+              selector: (context, _) => _.confError,
               builder: (context, e, _) {
                 return CustomTextField(
-                  name: "Confirm Passowrd",
+                  labelText: "Confirm Passowrd",
                   obscureText: true,
                   errorText: e,
                   controller: loginProvider.confpswController,
@@ -91,10 +88,17 @@ class SignUpForm extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () async {
-                print("######${formKey.currentState!.validate()}");
                 if (formKey.currentState!.validate()) {
-                  print("before");
-                  await loginProvider.signUp();
+                  if (await loginProvider.signUp()) {
+                    loginProvider.clearAfterSignUp();
+                    if (!context.mounted) return;
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const SignInPage(),
+                      ),
+                    );
+                  }
                 }
               },
               child: Container(
@@ -132,58 +136,5 @@ class SignUpForm extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  final String? Function(String?)? validator;
-  final TextEditingController? controller;
-  final String? name;
-  final bool isConPsw;
-  final bool obscureText;
-  final String? errorText;
-  final Widget? error;
-  const CustomTextField(
-      {super.key,
-      this.controller,
-      this.name,
-      this.validator,
-      this.errorText,
-      this.error,
-      this.obscureText = false,
-      this.isConPsw = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-        controller: controller,
-        style: context.bm,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          labelText: name,
-          error: error,
-          errorText: errorText,
-          labelStyle: context.bm,
-          errorStyle: context.bm!.copyWith(shadows: [
-            const Shadow(
-              color: Colors.black,
-              offset: Offset(1, 0),
-              blurRadius: 0.1,
-            ),
-          ], color: Colors.red),
-          errorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)),
-          focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)),
-          border: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)),
-          enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)),
-          disabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)),
-          focusedErrorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)),
-        ),
-        validator: validator);
   }
 }

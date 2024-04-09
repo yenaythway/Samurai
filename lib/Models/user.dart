@@ -1,109 +1,118 @@
-import 'dart:convert';
+// import 'dart:convert';
 
-User userFromJson(String str) => User.fromJson(json.decode(str));
+// User userFromJson(String str) => User.fromJson(json.decode(str));
 
-String userToJson(User data) => json.encode(data.toJson());
+// String userToJson(User data) => json.encode(data.toJson());
 
-class User {
-  final String kind;
-  final List<UserElement> users;
+// class User {
+//   final dynamic displayName;
+//   final String email;
+//   final bool isEmailVerified;
+//   final bool isAnonymous;
+//   final Metadata metadata;
+//   final dynamic phoneNumber;
+//   final dynamic photoUrl;
+//   final List<ProviderDatum> providerData;
+//   final dynamic refreshToken;
+//   final dynamic tenantId;
+//   final String uid;
 
-  User({
-    required this.kind,
-    required this.users,
-  });
+//   User({
+//     required this.displayName,
+//     required this.email,
+//     required this.isEmailVerified,
+//     required this.isAnonymous,
+//     required this.metadata,
+//     required this.phoneNumber,
+//     required this.photoUrl,
+//     required this.providerData,
+//     required this.refreshToken,
+//     required this.tenantId,
+//     required this.uid,
+//   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        kind: json["kind"],
-        users: List<UserElement>.from(
-            json["users"].map((x) => UserElement.fromJson(x))),
-      );
+//   factory User.fromJson(Map<String, dynamic> json) => User(
+//         displayName: json["displayName"],
+//         email: json["email"],
+//         isEmailVerified: json["isEmailVerified"],
+//         isAnonymous: json["isAnonymous"],
+//         metadata: Metadata.fromJson(json["metadata"]),
+//         phoneNumber: json["phoneNumber"],
+//         photoUrl: json["photoURL"],
+//         providerData: List<ProviderDatum>.from(
+//             json["providerData"].map((x) => ProviderDatum.fromJson(x))),
+//         refreshToken: json["refreshToken"],
+//         tenantId: json["tenantId"],
+//         uid: json["uid"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "kind": kind,
-        "users": List<dynamic>.from(users.map((x) => x.toJson())),
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "displayName": displayName,
+//         "email": email,
+//         "isEmailVerified": isEmailVerified,
+//         "isAnonymous": isAnonymous,
+//         "metadata": metadata.toJson(),
+//         "phoneNumber": phoneNumber,
+//         "photoURL": photoUrl,
+//         "providerData": List<dynamic>.from(providerData.map((x) => x.toJson())),
+//         "refreshToken": refreshToken,
+//         "tenantId": tenantId,
+//         "uid": uid,
+//       };
+// }
 
-class UserElement {
-  final String localId;
-  final String email;
-  final String passwordHash;
-  final bool emailVerified;
-  final int passwordUpdatedAt;
-  final List<ProviderUserInfo> providerUserInfo;
-  final String validSince;
-  final String lastLoginAt;
-  final String createdAt;
-  final DateTime lastRefreshAt;
+// class Metadata {
+//   final DateTime creationTime;
+//   final DateTime lastSignInTime;
 
-  UserElement({
-    required this.localId,
-    required this.email,
-    required this.passwordHash,
-    required this.emailVerified,
-    required this.passwordUpdatedAt,
-    required this.providerUserInfo,
-    required this.validSince,
-    required this.lastLoginAt,
-    required this.createdAt,
-    required this.lastRefreshAt,
-  });
+//   Metadata({
+//     required this.creationTime,
+//     required this.lastSignInTime,
+//   });
 
-  factory UserElement.fromJson(Map<String, dynamic> json) => UserElement(
-        localId: json["localId"],
-        email: json["email"],
-        passwordHash: json["passwordHash"],
-        emailVerified: json["emailVerified"],
-        passwordUpdatedAt: json["passwordUpdatedAt"],
-        providerUserInfo: List<ProviderUserInfo>.from(
-            json["providerUserInfo"].map((x) => ProviderUserInfo.fromJson(x))),
-        validSince: json["validSince"],
-        lastLoginAt: json["lastLoginAt"],
-        createdAt: json["createdAt"],
-        lastRefreshAt: DateTime.parse(json["lastRefreshAt"]),
-      );
+//   factory Metadata.fromJson(Map<String, dynamic> json) => Metadata(
+//         creationTime: DateTime.parse(json["creationTime"]),
+//         lastSignInTime: DateTime.parse(json["lastSignInTime"]),
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "localId": localId,
-        "email": email,
-        "passwordHash": passwordHash,
-        "emailVerified": emailVerified,
-        "passwordUpdatedAt": passwordUpdatedAt,
-        "providerUserInfo":
-            List<dynamic>.from(providerUserInfo.map((x) => x.toJson())),
-        "validSince": validSince,
-        "lastLoginAt": lastLoginAt,
-        "createdAt": createdAt,
-        "lastRefreshAt": lastRefreshAt.toIso8601String(),
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "creationTime": creationTime.toIso8601String(),
+//         "lastSignInTime": lastSignInTime.toIso8601String(),
+//       };
+// }
 
-class ProviderUserInfo {
-  final String providerId;
-  final String federatedId;
-  final String email;
-  final String rawId;
+// class ProviderDatum {
+//   final dynamic displayName;
+//   final String email;
+//   final dynamic phoneNumber;
+//   final dynamic photoUrl;
+//   final String providerId;
+//   final String uid;
 
-  ProviderUserInfo({
-    required this.providerId,
-    required this.federatedId,
-    required this.email,
-    required this.rawId,
-  });
+//   ProviderDatum({
+//     required this.displayName,
+//     required this.email,
+//     required this.phoneNumber,
+//     required this.photoUrl,
+//     required this.providerId,
+//     required this.uid,
+//   });
 
-  factory ProviderUserInfo.fromJson(Map<String, dynamic> json) =>
-      ProviderUserInfo(
-        providerId: json["providerId"],
-        federatedId: json["federatedId"],
-        email: json["email"],
-        rawId: json["rawId"],
-      );
+//   factory ProviderDatum.fromJson(Map<String, dynamic> json) => ProviderDatum(
+//         displayName: json["displayName"],
+//         email: json["email"],
+//         phoneNumber: json["phoneNumber"],
+//         photoUrl: json["photoURL"],
+//         providerId: json["providerId"],
+//         uid: json["uid"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "providerId": providerId,
-        "federatedId": federatedId,
-        "email": email,
-        "rawId": rawId,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "displayName": displayName,
+//         "email": email,
+//         "phoneNumber": phoneNumber,
+//         "photoURL": photoUrl,
+//         "providerId": providerId,
+//         "uid": uid,
+//       };
+// }
