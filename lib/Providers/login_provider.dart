@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:real_time_chatting/Constants/local_const.dart';
 import 'package:real_time_chatting/Constants/url_const.dart';
+import 'package:real_time_chatting/Models/user_info_model.dart';
+import 'package:real_time_chatting/Utils/local_storage.dart';
 
 class LoginProvider extends ChangeNotifier {
   bool isLogin = false;
@@ -69,14 +71,17 @@ class LoginProvider extends ChangeNotifier {
     return null;
   }
 
-  User? getUserFromLocal() {
-    Box<User> box = Hive.box('userData');
-    return box.get('user');
+  void storeUserToLocal(UserData user) {
+    StorageUtils.putString(lUserInfo, userDataToJson(user));
+  }
+
+  Future<UserData> getUserFromLocal() async {
+    String userDataString = await StorageUtils.getString(lUserInfo);
+    return userDataFromJson(userDataString);
   }
 
   Future<bool> createAccountToAgora() async {
-    User? user = getUserFromLocal();
-    if (user == null) return false;
+    UserData user = await getUserFromLocal();
     final String token = await getAgoraChatAppTempToken();
     const String apiUrl = 'https://$host/$orgName/$appName/users';
 
@@ -124,15 +129,18 @@ class LoginProvider extends ChangeNotifier {
   }
 
   Future<bool> signUp() async {
-    late UserCredential credential;
     bool result = false;
     try {
-      credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: pswController.text,
       );
-      // storeUserToLocal(credential.user);
-      await createUser(credential.user!);
+      UserData userData = UserData(
+          email: credential.user!.email ?? "",
+          passowrd: pswController.text,
+          uid: credential.user!.uid);
+      storeUserToLocal(userData);
       result = await createAccountToAgora();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -144,20 +152,6 @@ class LoginProvider extends ChangeNotifier {
       debugPrint("$e");
     }
     return result;
-  }
-
-  void storeUserToLocal(User? user) {
-    Box box = Hive.box('userinfo');
-    box.put('user', user);
-    print("0000${box.get('user')}");
-  }
-
-  Future<void> createUser(User user) async {
-    print("it is here");
-    final box = Hive.box('userinfo');
-    print("after open");
-    await box.put("user", user);
-    print("0000${box.get('user')}");
   }
 
   void signIn() {}
