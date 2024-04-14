@@ -1,2 +1,5 @@
-const String loginBox = "loginBox";
-const String userDataBox = "userDataBox";
+const hiveBoxes = [
+  {'name': 'settings', 'limit': false},
+  {'name': 'userinfo', 'limit': false},
+  {'name': 'cache', 'limit': true},
+];

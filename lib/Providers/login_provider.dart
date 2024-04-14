@@ -131,7 +131,8 @@ class LoginProvider extends ChangeNotifier {
         email: emailController.text,
         password: pswController.text,
       );
-      storeUserToLocal(credential.user);
+      // storeUserToLocal(credential.user);
+      await createUser(credential.user!);
       result = await createAccountToAgora();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -146,8 +147,17 @@ class LoginProvider extends ChangeNotifier {
   }
 
   void storeUserToLocal(User? user) {
-    Box box = Hive.box('userData');
+    Box box = Hive.box('userinfo');
     box.put('user', user);
+    print("0000${box.get('user')}");
+  }
+
+  Future<void> createUser(User user) async {
+    print("it is here");
+    final box = Hive.box('userinfo');
+    print("after open");
+    await box.put("user", user);
+    print("0000${box.get('user')}");
   }
 
   void signIn() {}
