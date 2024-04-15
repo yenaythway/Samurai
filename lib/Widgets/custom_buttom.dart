@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CustomTextButton extends StatelessWidget {
   const CustomTextButton({super.key, this.ontap, required this.text});

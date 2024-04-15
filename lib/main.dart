@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:real_time_chatting/Pages/name_page.dart';
 import 'package:real_time_chatting/Pages/sign_up_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
