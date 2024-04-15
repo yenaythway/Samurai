@@ -90,9 +90,9 @@ class LoginProvider extends ChangeNotifier {
       'Content-Type': 'application/json',
     };
     final Map<String, dynamic> requestBody = {
-      "username": user.email,
-      "password": user.uid,
-      "nickname": user.email
+      "username": user.uid,
+      "password": user.passowrd,
+      "nickname": user.uid,
     };
 
     final response = await http
@@ -104,15 +104,17 @@ class LoginProvider extends ChangeNotifier {
         .catchError((onError) {
       throw Exception('Failed to load agora create user');
     });
+    debugPrint("response status${response.statusCode}");
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       if (result["entities"].toString().isNotEmpty) {
         final bool msg = result["entities"][0]["activated"];
-        debugPrint("msg$msg");
         return msg;
       }
+    } else if (response.statusCode == 400) {
+      showMailError("User already exists with this mail");
+      return false;
     }
-
     return false;
   }
 
@@ -122,7 +124,6 @@ class LoginProvider extends ChangeNotifier {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
-      debugPrint('result-$result');
       return result;
     }
     return "";
@@ -156,11 +157,14 @@ class LoginProvider extends ChangeNotifier {
 
   void signIn() {}
   void clearAfterSignUp() {
-    // emailController.clear();
+    emailController.clear();
+    pswController.clear();
+    confpswController.clear();
+  }
+
+  void disposeTextControllers() {
     emailController.dispose();
-    // pswController.clear();
     pswController.dispose();
-    //  confpswController.clear();
     confpswController.dispose();
   }
 }

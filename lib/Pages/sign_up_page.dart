@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:real_time_chatting/Pages/name_page.dart';
 import 'package:real_time_chatting/Pages/sign_in_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/extension.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
+import 'package:real_time_chatting/Widgets/custom_buttom.dart';
 import 'package:real_time_chatting/Widgets/custom_text_form_field.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -86,30 +88,22 @@ class SignUpForm extends StatelessWidget {
                 );
               },
             ),
-            GestureDetector(
-              onTap: () async {
-                if (formKey.currentState!.validate()) {
-                  if (await loginProvider.signUp()) {
-                    loginProvider.clearAfterSignUp();
-                    if (!context.mounted) return;
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const SignInPage(),
-                      ),
-                    );
-                  }
-                }
+            CustomTextButton(
+              text: 'Sign Up',
+              ontap: () async {
+                // if (formKey.currentState!.validate()) {
+                //   if (await loginProvider.signUp()) {
+                //     loginProvider.clearAfterSignUp();
+                if (!context.mounted) return;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const NamePage(),
+                  ),
+                );
+                //   }
+                // }
               },
-              child: Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  decoration: const BoxDecoration(color: Colors.white),
-                  width: double.infinity,
-                  child: const Text(
-                    'Sign Up',
-                    style: TextStyle(color: Colors.black),
-                  )),
             ),
             const SizedBox(height: 20),
             const Row(
