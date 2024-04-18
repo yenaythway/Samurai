@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:real_time_chatting/Constants/local_const.dart';
 import 'package:real_time_chatting/Constants/url_const.dart';
 import 'package:real_time_chatting/Models/user_info_model.dart';
 import 'package:real_time_chatting/Utils/local_storage.dart';
+
+final loginProvider =
+    ChangeNotifierProvider<LoginProvider>((ref) => LoginProvider());
 
 class LoginProvider extends ChangeNotifier {
   bool isLogin = false;
@@ -142,7 +146,7 @@ class LoginProvider extends ChangeNotifier {
           passowrd: pswController.text,
           uid: credential.user!.uid);
       storeUserToLocal(userData);
-      result = await createAccountToAgora();
+      result = true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         showPswError('The password is too weak.');

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Pages/name_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
@@ -11,9 +11,6 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginProvider loginProvider =
-        Provider.of<LoginProvider>(context, listen: false);
-
     return SafeArea(
       child: Container(
         decoration: const BoxDecoration(
@@ -22,26 +19,24 @@ class SignUpPage extends StatelessWidget {
                 image: AssetImage(
                   "assets/login.png",
                 ))),
-        child: SuperScaffold(
+        child: const SuperScaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
-          body: SignUpForm(loginProvider: loginProvider),
+          body: SignUpForm(),
         ),
       ),
     );
   }
 }
 
-class SignUpForm extends StatelessWidget {
+class SignUpForm extends ConsumerWidget {
   const SignUpForm({
     super.key,
-    required this.loginProvider,
   });
 
-  final LoginProvider loginProvider;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final login = ref.read(loginProvider);
     final formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,
@@ -50,57 +45,56 @@ class SignUpForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Selector<LoginProvider, String>(
-              selector: (context, _) => _.mailError,
-              builder: (context, e, _) {
+            Consumer(
+              builder: (context, ref, child) {
+                final mailError = ref.watch(loginProvider).mailError;
                 return CustomTextField(
                   labelText: "Gmail",
-                  controller: loginProvider.emailController,
-                  errorText: e,
-                  validator: (value) => loginProvider.validateEmail(value),
+                  controller: login.emailController,
+                  errorText: mailError,
+                  validator: (value) => login.validateEmail(value),
                 );
               },
             ),
-            Selector<LoginProvider, String>(
-              selector: (context, _) => _.pswError,
-              builder: (context, e, _) {
+            Consumer(
+              builder: (context, ref, child) {
+                final pswError = ref.watch(loginProvider).pswError;
                 return CustomTextField(
                   labelText: "Passowrd",
                   obscureText: true,
-                  errorText: e,
-                  controller: loginProvider.pswController,
-                  validator: (value) => loginProvider.validatePassword(value),
+                  errorText: pswError,
+                  controller: login.pswController,
+                  validator: (value) => login.validatePassword(value),
                 );
               },
             ),
-            Selector<LoginProvider, String>(
-              selector: (context, _) => _.confError,
-              builder: (context, e, _) {
+            Consumer(
+              builder: (context, ref, child) {
+                final confError = ref.watch(loginProvider).confError;
                 return CustomTextField(
                   labelText: "Confirm Passowrd",
                   obscureText: true,
-                  errorText: e,
-                  controller: loginProvider.confpswController,
-                  validator: (value) =>
-                      loginProvider.validateConfPassword(value),
+                  errorText: confError,
+                  controller: login.confpswController,
+                  validator: (value) => login.validateConfPassword(value),
                 );
               },
             ),
             CustomTextButton(
               text: 'Sign Up',
               ontap: () async {
-                // if (formKey.currentState!.validate()) {
-                //   if (await loginProvider.signUp()) {
-                //     loginProvider.clearAfterSignUp();
-                if (!context.mounted) return;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const NamePage(),
-                  ),
-                );
-                //   }
-                // }
+                if (formKey.currentState!.validate()) {
+                  if (await login.signUp()) {
+                    login.clearAfterSignUp();
+                    if (!context.mounted) return;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const NamePage(),
+                      ),
+                    );
+                  }
+                }
               },
             ),
             const SizedBox(height: 20),

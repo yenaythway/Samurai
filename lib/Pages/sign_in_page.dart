@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
 import 'package:real_time_chatting/Widgets/custom_text_form_field.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends ConsumerWidget {
   const SignInPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final LoginProvider loginProvider =
-        Provider.of<LoginProvider>(context, listen: false);
-
+  Widget build(context, ref) {
     return SafeArea(
       child: Container(
         decoration: const BoxDecoration(
@@ -20,26 +17,24 @@ class SignInPage extends StatelessWidget {
                 image: AssetImage(
                   "assets/login.png",
                 ))),
-        child: SuperScaffold(
+        child: const SuperScaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
-          body: SignInForm(loginProvider: loginProvider),
+          body: SignInForm(),
         ),
       ),
     );
   }
 }
 
-class SignInForm extends StatelessWidget {
+class SignInForm extends ConsumerWidget {
   const SignInForm({
     super.key,
-    required this.loginProvider,
   });
 
-  final LoginProvider loginProvider;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final login = ref.read(loginProvider);
     final formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,
@@ -48,26 +43,26 @@ class SignInForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Selector<LoginProvider, String>(
-              selector: (context, loginProvider) => loginProvider.mailError,
-              builder: (context, e, _) {
+            Consumer(
+              builder: (context, ref, child) {
+                final mailError = ref.watch(loginProvider).mailError;
                 return CustomTextField(
                   labelText: "Gmail",
-                  controller: loginProvider.emailController,
-                  errorText: e,
-                  validator: (value) => loginProvider.validateEmail(value),
+                  controller: login.emailController,
+                  errorText: mailError,
+                  validator: (value) => login.validateEmail(value),
                 );
               },
             ),
-            Selector<LoginProvider, String>(
-              selector: (context, counterModel) => counterModel.pswError,
-              builder: (context, e, _) {
+            Consumer(
+              builder: (context, ref, child) {
+                final pswError = ref.watch(loginProvider).pswError;
                 return CustomTextField(
                   labelText: "Passowrd",
                   obscureText: true,
-                  errorText: e,
-                  controller: loginProvider.pswController,
-                  validator: (value) => loginProvider.validatePassword(value),
+                  errorText: pswError,
+                  controller: login.pswController,
+                  validator: (value) => login.validatePassword(value),
                 );
               },
             ),

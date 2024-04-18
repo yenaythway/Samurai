@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Pages/sign_in_page.dart';
 import 'package:real_time_chatting/Utils/extension.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
 import 'package:real_time_chatting/Widgets/custom_buttom.dart';
 import 'package:real_time_chatting/Widgets/custom_text_form_field.dart';
 
-class NamePage extends StatelessWidget {
+class NamePage extends ConsumerWidget {
   const NamePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context, ref) {
     return SafeArea(
       child: Container(
         decoration: const BoxDecoration(
@@ -21,11 +22,20 @@ class NamePage extends StatelessWidget {
         child: SuperScaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(
+                  Icons.keyboard_arrow_left,
+                  color: Colors.white,
+                )),
+            backgroundColor: Colors.black,
+          ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Expanded(flex: 3, child: SizedBox.shrink()),
                 const CustomTextField(
                   labelText: "Name",
                 ),
@@ -57,21 +67,18 @@ class NamePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const Expanded(flex: 2, child: SizedBox.shrink()),
                 CustomTextButton(
                   text: "Next",
                   ontap: () async {
                     if (!context.mounted) return;
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const SignInPage(),
-                      ),
-                    );
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const SignInPage()),
+                        (Route<dynamic> route) => false);
                   },
-                )
+                ),
+                const Expanded(flex: 4, child: SizedBox.shrink()),
               ],
             ),
           ),
