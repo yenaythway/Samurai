@@ -6,10 +6,10 @@
 
 #import "GeneratedPluginRegistrant.h"
 
-#if __has_include(<agora_rtc_engine/AgoraRtcNgPlugin.h>)
-#import <agora_rtc_engine/AgoraRtcNgPlugin.h>
+#if __has_include(<agora_chat_sdk/ImFlutterSdkPlugin.h>)
+#import <agora_chat_sdk/ImFlutterSdkPlugin.h>
 #else
-@import agora_rtc_engine;
+@import agora_chat_sdk;
 #endif
 
 #if __has_include(<firebase_auth/FLTFirebaseAuthPlugin.h>)
@@ -36,12 +36,6 @@
 @import google_sign_in_ios;
 #endif
 
-#if __has_include(<iris_method_channel/IrisMethodChannelPlugin.h>)
-#import <iris_method_channel/IrisMethodChannelPlugin.h>
-#else
-@import iris_method_channel;
-#endif
-
 #if __has_include(<path_provider_foundation/PathProviderPlugin.h>)
 #import <path_provider_foundation/PathProviderPlugin.h>
 #else
@@ -51,12 +45,11 @@
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
-  [AgoraRtcNgPlugin registerWithRegistrar:[registry registrarForPlugin:@"AgoraRtcNgPlugin"]];
+  [ImFlutterSdkPlugin registerWithRegistrar:[registry registrarForPlugin:@"ImFlutterSdkPlugin"]];
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FlutterSecureStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStoragePlugin"]];
   [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
-  [IrisMethodChannelPlugin registerWithRegistrar:[registry registrarForPlugin:@"IrisMethodChannelPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
 }
 

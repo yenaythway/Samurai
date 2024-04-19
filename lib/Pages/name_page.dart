@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:real_time_chatting/Pages/home_page.dart';
 import 'package:real_time_chatting/Pages/sign_in_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/extension.dart';
