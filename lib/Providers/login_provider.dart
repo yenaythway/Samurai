@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Constants/url_const.dart';
+import 'package:real_time_chatting/Models/users_model.dart';
 import 'package:real_time_chatting/Utils/local_storage.dart';
 import 'package:real_time_chatting/Constants/local_const.dart';
 import 'package:real_time_chatting/Models/user_info_model.dart';
@@ -117,10 +118,33 @@ class LoginProvider extends ChangeNotifier {
     return userDataFromJson(userDataString);
   }
 
+  Future<bool> getUsers() async {
+    final String token = await getAgoraChatAppTempToken();
+    const String apiUrl = 'https://$host/$orgName/$appName/users';
+    final Map<String, String> headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    final response = await http
+        .get(
+      Uri.parse(apiUrl),
+      headers: headers,
+    )
+        .catchError((onError) {
+      throw Exception('Failed to load agora create user');
+    });
+    debugPrint("response status${response.statusCode}");
+    if (response.statusCode == 200) {
+      UsersModel userModel = usersModelFromJson(response.body);
+      List<>users=userModel.entities;
+    }
+    return false;
+  }
+
   Future<bool> createAccountToAgora() async {
     final String token = await getAgoraChatAppTempToken();
     const String apiUrl = 'https://$host/$orgName/$appName/users';
-
     final Map<String, String> headers = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
