@@ -2,7 +2,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class StorageUtils {
   static StorageUtils? _instance;
-  static bool isShow = false;
   static const _secureStorage = FlutterSecureStorage();
   StorageUtils._();
   factory StorageUtils() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Pages/name_page.dart';
+import 'package:real_time_chatting/Pages/sign_in_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
 import 'package:real_time_chatting/Widgets/custom_buttom.dart';
@@ -30,9 +31,7 @@ class SignUpPage extends StatelessWidget {
 }
 
 class SignUpForm extends ConsumerWidget {
-  const SignUpForm({
-    super.key,
-  });
+  const SignUpForm({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -85,13 +84,10 @@ class SignUpForm extends ConsumerWidget {
               ontap: () async {
                 if (formKey.currentState!.validate()) {
                   if (await login.signUp()) {
-                    login.clearAfterSignUp();
                     if (!context.mounted) return;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const NamePage(),
-                      ),
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const NamePage()),
+                      // (Route<dynamic> route) => false
                     );
                   }
                 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:real_time_chatting/Pages/home_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
+import 'package:real_time_chatting/Widgets/custom_buttom.dart';
 import 'package:real_time_chatting/Widgets/custom_text_form_field.dart';
 
 class SignInPage extends ConsumerWidget {
@@ -66,14 +68,20 @@ class SignInForm extends ConsumerWidget {
                 );
               },
             ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).primaryColor),
-                child: const Text("Sign In"),
-              ),
+            CustomTextButton(
+              text: "Sign in",
+              ontap: () async {
+                if (formKey.currentState!.validate()) {
+                  if (await login.signIn()) {
+                    login.disposeTextControllers();
+                    if (!context.mounted) return;
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage()),
+                        (Route<dynamic> route) => false);
+                  }
+                }
+              },
             )
           ],
         ),

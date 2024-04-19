@@ -1,12 +1,13 @@
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:real_time_chatting/Constants/local_const.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Constants/url_const.dart';
-import 'package:real_time_chatting/Models/user_info_model.dart';
 import 'package:real_time_chatting/Utils/local_storage.dart';
+import 'package:real_time_chatting/Constants/local_const.dart';
+import 'package:real_time_chatting/Models/user_info_model.dart';
 
 final loginProvider =
     ChangeNotifierProvider<LoginProvider>((ref) => LoginProvider());
@@ -16,9 +17,12 @@ class LoginProvider extends ChangeNotifier {
   String mailError = '';
   String pswError = '';
   String confError = '';
+  String nameError = '';
+  late UserCredential credential;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController pswController = TextEditingController();
   final TextEditingController confpswController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
   bool isValidEmailFormat() {
     String emailRegex = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
@@ -51,6 +55,11 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void showNameError(String value) {
+    nameError = value;
+    notifyListeners();
+  }
+
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       showPswError("Please enter password");
@@ -75,8 +84,33 @@ class LoginProvider extends ChangeNotifier {
     return null;
   }
 
-  void storeUserToLocal(UserData user) {
-    StorageUtils.putString(lUserInfo, userDataToJson(user));
+  bool isValidName(String value) {
+    String allowedCharString =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ';
+    List<String> allowedCharList = allowedCharString.split("");
+    for (int i = 0; i < value.length; i++) {
+      bool isValid = allowedCharList.contains(value[i]);
+      if (!isValid) return false;
+    }
+    return true;
+  }
+
+  String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      showNameError("Please enter name");
+      return null;
+    } else if (!isValidName(value)) {
+      showNameError("Invalid name");
+      return null;
+    }
+    nameError = "";
+    notifyListeners();
+    return null;
+  }
+
+  Future<void> storeInfoToLocal(UserData user) async {
+    await StorageUtils.putString(lUserInfo, userDataToJson(user));
+    await StorageUtils.putBool(lisLogin, true);
   }
 
   Future<UserData> getUserFromLocal() async {
@@ -85,7 +119,6 @@ class LoginProvider extends ChangeNotifier {
   }
 
   Future<bool> createAccountToAgora() async {
-    UserData user = await getUserFromLocal();
     final String token = await getAgoraChatAppTempToken();
     const String apiUrl = 'https://$host/$orgName/$appName/users';
 
@@ -94,9 +127,9 @@ class LoginProvider extends ChangeNotifier {
       'Content-Type': 'application/json',
     };
     final Map<String, dynamic> requestBody = {
-      "username": user.uid,
-      "password": user.passowrd,
-      "nickname": user.uid,
+      "username": credential.user!.uid,
+      "password": pswController.text,
+      "nickname": nameController.text,
     };
 
     final response = await http
@@ -136,16 +169,10 @@ class LoginProvider extends ChangeNotifier {
   Future<bool> signUp() async {
     bool result = false;
     try {
-      UserCredential credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: pswController.text,
       );
-      UserData userData = UserData(
-          email: credential.user!.email ?? "",
-          passowrd: pswController.text,
-          uid: credential.user!.uid);
-      storeUserToLocal(userData);
       result = true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -159,16 +186,36 @@ class LoginProvider extends ChangeNotifier {
     return result;
   }
 
-  void signIn() {}
+  Future<bool> signIn() async {
+    bool result = false;
+    try {
+      credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: pswController.text);
+      UserData userData = UserData(
+          email: credential.user!.email ?? "",
+          passowrd: pswController.text,
+          uid: credential.user!.uid);
+      storeInfoToLocal(userData);
+      result = true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        showMailError('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        showPswError('Wrong password provided for that user.');
+      }
+    }
+    return result;
+  }
+
   void clearAfterSignUp() {
     emailController.clear();
     pswController.clear();
-    confpswController.clear();
   }
 
   void disposeTextControllers() {
     emailController.dispose();
     pswController.dispose();
     confpswController.dispose();
+    nameController.dispose();
   }
 }
