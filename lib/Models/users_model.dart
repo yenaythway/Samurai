@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:real_time_chatting/Models/user.dart';
+
 UsersModel usersModelFromJson(String str) =>
     UsersModel.fromJson(json.decode(str));
 
@@ -9,7 +11,7 @@ class UsersModel {
   final String path;
   final String uri;
   final int timestamp;
-  final List<Entity> entities;
+  final List<User> entities;
   final int count;
   final String action;
   final int duration;
@@ -29,7 +31,7 @@ class UsersModel {
         uri: json["uri"],
         timestamp: json["timestamp"],
         entities:
-            List<Entity>.from(json["entities"].map((x) => Entity.fromJson(x))),
+            List<User>.from(json["entities"].map((x) => User.fromJson(x))),
         count: json["count"],
         action: json["action"],
         duration: json["duration"],
@@ -39,49 +41,9 @@ class UsersModel {
         "path": path,
         "uri": uri,
         "timestamp": timestamp,
-        "entities": List<dynamic>.from(entities.map((x) => x.toJson())),
+        "entities": List<User>.from(entities.map((x) => x.toJson())),
         "count": count,
         "action": action,
         "duration": duration,
-      };
-}
-
-class Entity {
-  final String uuid;
-  final String type;
-  final int created;
-  final int modified;
-  final String username;
-  final bool activated;
-  final String nickname;
-
-  Entity({
-    required this.uuid,
-    required this.type,
-    required this.created,
-    required this.modified,
-    required this.username,
-    required this.activated,
-    required this.nickname,
-  });
-
-  factory Entity.fromJson(Map<String, dynamic> json) => Entity(
-        uuid: json["uuid"],
-        type: json["type"],
-        created: json["created"],
-        modified: json["modified"],
-        username: json["username"],
-        activated: json["activated"],
-        nickname: json["nickname"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "uuid": uuid,
-        "type": type,
-        "created": created,
-        "modified": modified,
-        "username": username,
-        "activated": activated,
-        "nickname": nickname,
       };
 }

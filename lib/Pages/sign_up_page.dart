@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Pages/name_page.dart';
+import 'package:real_time_chatting/Pages/sign_in_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
+import 'package:real_time_chatting/Utils/extension.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
 import 'package:real_time_chatting/Widgets/custom_buttom.dart';
 import 'package:real_time_chatting/Widgets/custom_text_form_field.dart';
@@ -93,6 +97,24 @@ class SignUpForm extends ConsumerWidget {
               },
             ),
             const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Already have an account?",
+                  style: context.bs!.copyWith(color: Colors.white),
+                ),
+                InkWell(
+                  onTap: () => Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignInPage())),
+                  child: Text("Sign In",
+                      style: context.bs!.copyWith(color: Colors.blue)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
             const Row(
               children: [
                 Expanded(child: Divider()),

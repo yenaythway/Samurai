@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Pages/home_page.dart';
+import 'package:real_time_chatting/Pages/sign_up_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
+import 'package:real_time_chatting/Utils/extension.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
 import 'package:real_time_chatting/Widgets/custom_buttom.dart';
 import 'package:real_time_chatting/Widgets/custom_text_form_field.dart';
@@ -82,7 +84,25 @@ class SignInForm extends ConsumerWidget {
                   }
                 }
               },
-            )
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Don't have an account?",
+                  style: context.bs!.copyWith(color: Colors.white),
+                ),
+                InkWell(
+                  onTap: () => Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignUpPage())),
+                  child: Text("Sign Up",
+                      style: context.bs!.copyWith(color: Colors.blue)),
+                ),
+              ],
+            ),
           ],
         ),
       ),

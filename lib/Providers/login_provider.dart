@@ -1,16 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Constants/url_const.dart';
 import 'package:real_time_chatting/Models/users_model.dart';
 import 'package:real_time_chatting/Utils/local_storage.dart';
 import 'package:real_time_chatting/Constants/local_const.dart';
-import 'package:real_time_chatting/Models/user_info_model.dart';
+import 'package:real_time_chatting/Models/user.dart';
 
 final loginProvider =
     ChangeNotifierProvider<LoginProvider>((ref) => LoginProvider());
+final userDataProvider = FutureProvider<List<User>>((ref) async {
+  return ref.watch(loginProvider).getUsers();
+});
 
 class LoginProvider extends ChangeNotifier {
   bool isLogin = false;
@@ -18,7 +21,8 @@ class LoginProvider extends ChangeNotifier {
   String pswError = '';
   String confError = '';
   String nameError = '';
-  late UserCredential credential;
+  List<User> users = [];
+  late fb_auth.UserCredential credential;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController pswController = TextEditingController();
   final TextEditingController confpswController = TextEditingController();
@@ -84,41 +88,17 @@ class LoginProvider extends ChangeNotifier {
     return null;
   }
 
-  bool isValidName(String value) {
-    String allowedCharString =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ';
-    List<String> allowedCharList = allowedCharString.split("");
-    for (int i = 0; i < value.length; i++) {
-      bool isValid = allowedCharList.contains(value[i]);
-      if (!isValid) return false;
-    }
-    return true;
-  }
-
-  String? validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      showNameError("Please enter name");
-      return null;
-    } else if (!isValidName(value)) {
-      showNameError("Invalid name");
-      return null;
-    }
-    nameError = "";
-    notifyListeners();
-    return null;
-  }
-
-  Future<void> storeInfoToLocal(UserData user) async {
-    await StorageUtils.putString(lUserInfo, userDataToJson(user));
+  Future<void> storeInfoToLocal(User user) async {
+    await StorageUtils.putString(lUserInfo, userToJson(user));
     await StorageUtils.putBool(lisLogin, true);
   }
 
-  Future<UserData> getUserFromLocal() async {
+  Future<User> getUserFromLocal() async {
     String userDataString = await StorageUtils.getString(lUserInfo);
-    return userDataFromJson(userDataString);
+    return userFromJson(userDataString);
   }
 
-  Future<bool> getUsers() async {
+  Future<List<User>> getUsers() async {
     final String token = await getAgoraChatAppTempToken();
     const String apiUrl = 'https://$host/$orgName/$appName/users';
     final Map<String, String> headers = {
@@ -137,9 +117,10 @@ class LoginProvider extends ChangeNotifier {
     debugPrint("response status${response.statusCode}");
     if (response.statusCode == 200) {
       UsersModel userModel = usersModelFromJson(response.body);
-      List<>users=userModel.entities;
+      users = userModel.entities;
+      notifyListeners();
     }
-    return false;
+    return users;
   }
 
   Future<bool> createAccountToAgora() async {
@@ -192,12 +173,13 @@ class LoginProvider extends ChangeNotifier {
   Future<bool> signUp() async {
     bool result = false;
     try {
-      credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      credential =
+          await fb_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: pswController.text,
       );
       result = true;
-    } on FirebaseAuthException catch (e) {
+    } on fb_auth.FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         showPswError('The password is too weak.');
       } else if (e.code == 'email-already-in-use') {
@@ -212,15 +194,16 @@ class LoginProvider extends ChangeNotifier {
   Future<bool> signIn() async {
     bool result = false;
     try {
-      credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, password: pswController.text);
-      UserData userData = UserData(
+      credential = await fb_auth.FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text, password: pswController.text);
+      User userData = User(
           email: credential.user!.email ?? "",
           passowrd: pswController.text,
-          uid: credential.user!.uid);
+          username: credential.user!.uid);
       storeInfoToLocal(userData);
       result = true;
-    } on FirebaseAuthException catch (e) {
+    } on fb_auth.FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         showMailError('No user found for that email.');
       } else if (e.code == 'wrong-password') {
@@ -240,5 +223,29 @@ class LoginProvider extends ChangeNotifier {
     pswController.dispose();
     confpswController.dispose();
     nameController.dispose();
+  }
+
+  bool isValidName(String value) {
+    String allowedCharString =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ';
+    List<String> allowedCharList = allowedCharString.split("");
+    for (int i = 0; i < value.length; i++) {
+      bool isValid = allowedCharList.contains(value[i]);
+      if (!isValid) return false;
+    }
+    return true;
+  }
+
+  String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      showNameError("Please enter name");
+      return null;
+    } else if (!isValidName(value)) {
+      showNameError("Invalid name");
+      return null;
+    }
+    nameError = "";
+    notifyListeners();
+    return null;
   }
 }
