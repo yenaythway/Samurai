@@ -18,7 +18,7 @@ class AllUserWidget extends ConsumerWidget {
         data: (data) {
           List<User> userData = data.map((e) => e).toList();
           return ListView.separated(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               physics: const BouncingScrollPhysics(),
               itemCount: userData.length,
               separatorBuilder: (context, index) => Container(

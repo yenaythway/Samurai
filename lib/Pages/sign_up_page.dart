@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Pages/name_page.dart';
 import 'package:real_time_chatting/Pages/sign_in_page.dart';
