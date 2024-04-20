@@ -13,27 +13,33 @@ class AllUserWidget extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final userData = ref.watch(userDataProvider);
     return userData.when(
-        data: (userData) => ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            itemCount: userData.length,
-            separatorBuilder: (context, index) => Container(
-                  width: double.infinity,
-                  height: 1,
-                  color: const Color.fromARGB(255, 212, 212, 212),
-                ),
-            itemBuilder: (context, index) => GestureDetector(
-                  onTap: () => null,
-                  child: EachUserWiget(
-                    user: userData[index],
+        skipLoadingOnRefresh: true,
+        skipLoadingOnReload: true,
+        data: (data) {
+          List<User> userData = data.map((e) => e).toList();
+          return ListView.separated(
+              padding: EdgeInsets.all(10),
+              physics: const BouncingScrollPhysics(),
+              itemCount: userData.length,
+              separatorBuilder: (context, index) => Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: const Color.fromARGB(255, 212, 212, 212),
                   ),
-                )),
+              itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => null,
+                    child: EachUserWiget(
+                      user: userData[index],
+                    ),
+                  ));
+        },
         error: (_, __) => Center(
               child: Text(
                 "There is error",
                 style: context.bm,
               ),
             ),
-        loading: () => Center(
+        loading: () => const Center(
               child: CircularProgressIndicator(),
             ));
   }
@@ -63,7 +69,9 @@ class EachUserWiget extends StatelessWidget {
             user.nickname ?? "-",
             style: context.bm!.copyWith(color: Colors.black),
           ),
-          Icon(Icons.chat_bubble_outline)
+          const Expanded(child: SizedBox()),
+          const Icon(Icons.add_circle_outline_rounded),
+          // const SizedBox(width: 20)
         ],
       ),
     );

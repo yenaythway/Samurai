@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,11 +9,20 @@ import 'package:real_time_chatting/Models/users_model.dart';
 import 'package:real_time_chatting/Utils/local_storage.dart';
 import 'package:real_time_chatting/Constants/local_const.dart';
 import 'package:real_time_chatting/Models/user.dart';
+import 'package:real_time_chatting/Utils/super_print.dart';
 
 final loginProvider =
     ChangeNotifierProvider<LoginProvider>((ref) => LoginProvider());
 final userDataProvider = FutureProvider<List<User>>((ref) async {
-  return ref.watch(loginProvider).getUsers();
+  final timer = Timer(
+    const Duration(seconds: 3),
+    () {
+      ref.invalidateSelf();
+    },
+  );
+  ref.onDispose(timer.cancel);
+
+  return await ref.read(loginProvider).getUsers();
 });
 
 class LoginProvider extends ChangeNotifier {
@@ -118,6 +128,8 @@ class LoginProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       UsersModel userModel = usersModelFromJson(response.body);
       users = userModel.entities;
+      users.add(users.first);
+      superPrint("user count - ${users.length}");
       notifyListeners();
     }
     return users;
@@ -204,6 +216,7 @@ class LoginProvider extends ChangeNotifier {
       storeInfoToLocal(userData);
       result = true;
     } on fb_auth.FirebaseAuthException catch (e) {
+      superPrint(e.code);
       if (e.code == 'user-not-found') {
         showMailError('No user found for that email.');
       } else if (e.code == 'wrong-password') {
