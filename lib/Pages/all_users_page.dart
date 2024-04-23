@@ -27,7 +27,7 @@ class AllUserWidget extends ConsumerWidget {
                     color: const Color.fromARGB(255, 212, 212, 212),
                   ),
               itemBuilder: (context, index) => GestureDetector(
-                    onTap: () => null,
+                    onTap: () {},
                     child: EachUserWiget(
                       user: userData[index],
                     ),

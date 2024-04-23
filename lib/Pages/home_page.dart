@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Pages/all_users_page.dart';
-import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/extension.dart';
 
 class HomePage extends StatelessWidget {
@@ -45,7 +43,7 @@ class HomePage extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20))),
-            child: AllUserWidget(),
+            child: const AllUserWidget(),
           ),
         ),
       ),
