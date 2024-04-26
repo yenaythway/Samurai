@@ -100,6 +100,7 @@ class LoginProvider extends ChangeNotifier {
 
   Future<void> storeInfoToLocal(User user) async {
     await StorageUtils.putString(lUserInfo, userToJson(user));
+    await StorageUtils.putString(lCurrentUid, "${user.uuid}");
     await StorageUtils.putBool(lisLogin, true);
   }
 
