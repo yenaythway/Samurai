@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:real_time_chatting/Models/user.dart';
+import 'package:real_time_chatting/Pages/conversation_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/extension.dart';
 
 class AllUserWidget extends ConsumerWidget {
-  const AllUserWidget({
-    super.key,
-  });
+  const AllUserWidget({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
@@ -70,7 +69,10 @@ class EachUserWiget extends StatelessWidget {
             style: context.bm!.copyWith(color: Colors.black),
           ),
           const Expanded(child: SizedBox()),
-          const Icon(Icons.add_circle_outline_rounded),
+          InkWell(
+              onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ConversationPage())),
+              child: const Icon(Icons.add_circle_outline_rounded)),
           // const SizedBox(width: 20)
         ],
       ),

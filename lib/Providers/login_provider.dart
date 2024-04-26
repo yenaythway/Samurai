@@ -14,13 +14,13 @@ import 'package:real_time_chatting/Utils/super_print.dart';
 final loginProvider =
     ChangeNotifierProvider<LoginProvider>((ref) => LoginProvider());
 final userDataProvider = FutureProvider<List<User>>((ref) async {
-  final timer = Timer(
-    const Duration(seconds: 3),
-    () {
-      ref.invalidateSelf();
-    },
-  );
-  ref.onDispose(timer.cancel);
+  // final timer = Timer(
+  //   const Duration(seconds: 5),
+  //   () {
+  //     ref.invalidateSelf();
+  //   },
+  // );
+  // ref.onDispose(timer.cancel);
 
   return await ref.read(loginProvider).getUsers();
 });
@@ -125,12 +125,11 @@ class LoginProvider extends ChangeNotifier {
         .catchError((onError) {
       throw Exception('Failed to load agora create user');
     });
-    debugPrint("response status${response.statusCode}");
     if (response.statusCode == 200) {
       UsersModel userModel = usersModelFromJson(response.body);
       users = userModel.entities;
       users.add(users.first);
-      superPrint("user count - ${users.length}");
+      debugPrint("user count - ${users.length}");
       notifyListeners();
     }
     return users;
