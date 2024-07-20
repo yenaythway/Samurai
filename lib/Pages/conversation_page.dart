@@ -52,6 +52,7 @@ class ConversationPage extends ConsumerWidget {
                                 top: 8,
                                 right:
                                     chatMsg.direction == MessageDirection.SEND
+                                    
                                         ? 0
                                         : 80,
                                 left: chatMsg.direction ==
@@ -123,7 +124,7 @@ class ConversationPage extends ConsumerWidget {
                     ),
                     IconButton(
                         onPressed: () {
-                          chat.sendMessage(targetId, chatMessage)
+                          // chat.sendMessage(targetId, chatMessage)
                         },
                         icon: Icon(Icons.send,
                             color: primaryColor.withOpacity(0.5)))

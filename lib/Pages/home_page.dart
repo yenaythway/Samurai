@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:real_time_chatting/Constants/colors.dart';
 import 'package:real_time_chatting/Pages/all_users_page.dart';
 import 'package:real_time_chatting/Pages/chat_page.dart';

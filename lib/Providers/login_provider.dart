@@ -10,6 +10,7 @@ import 'package:real_time_chatting/Utils/local_storage.dart';
 import 'package:real_time_chatting/Constants/local_const.dart';
 import 'package:real_time_chatting/Models/user.dart';
 import 'package:real_time_chatting/Utils/super_print.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 final loginProvider =
     ChangeNotifierProvider<LoginProvider>((ref) => LoginProvider());
@@ -260,5 +261,25 @@ class LoginProvider extends ChangeNotifier {
     nameError = "";
     notifyListeners();
     return null;
+  }
+
+final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final fb_auth.FirebaseAuth _auth = fb_auth.FirebaseAuth.instance;
+
+  Future<fb_auth.UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+
+    // Create a new credential
+    final credential = fb_auth.GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await _auth.signInWithCredential(credential);
   }
 }

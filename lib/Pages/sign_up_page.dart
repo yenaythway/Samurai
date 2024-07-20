@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:real_time_chatting/Common/google_sign_in_widget.dart';
 import 'package:real_time_chatting/Pages/name_page.dart';
 import 'package:real_time_chatting/Pages/sign_in_page.dart';
 import 'package:real_time_chatting/Providers/login_provider.dart';
@@ -124,15 +125,7 @@ class SignUpForm extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(5)),
-              child: Image.asset(
-                "assets/google.png",
-                height: 40,
-              ),
-            )
+            const GoogleSignInWidget()
           ],
         ),
       ),

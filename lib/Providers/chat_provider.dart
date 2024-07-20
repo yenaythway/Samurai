@@ -31,7 +31,9 @@ class ChatProvider extends ChangeNotifier {
           onTokenWillExpire: onTokenWillExpire,
           onTokenDidExpire: onTokenDidExpire),
     );
+ 
 
+ 
     agoraChatClient.chatManager.addEventHandler(
       "MESSAGE_HANDLER",
       ChatEventHandler(onMessagesReceived: onMessagesReceived),
@@ -42,7 +44,7 @@ class ChatProvider extends ChangeNotifier {
     for (var msg in messages) {
       if (msg.body.type == MessageType.TXT) {
         ChatTextMessageBody body = msg.body as ChatTextMessageBody;
-        displayMessage(body.content, false);
+        // displayMessage(body.content, false);
         debugPrint("Message from ${msg.from}");
       } else {
         String msgType = msg.body.type.name;
@@ -75,36 +77,4 @@ class ChatProvider extends ChangeNotifier {
     ChatClient.getInstance.chatManager.sendMessage(msg);
   }
 
-  void joinLeave() async {
-    if (!isJoined) {
-      // Log in
-      try {
-        await agoraChatClient.loginWithAgoraToken(userId, token);
-        showLog("Logged in successfully as $userId");
-        setState(() {
-          isJoined = true;
-        });
-      } on ChatError catch (e) {
-        if (e.code == 200) {
-          // Already logged in
-          setState(() {
-            isJoined = true;
-          });
-        } else {
-          showLog("Login failed, code: ${e.code}, desc: ${e.description}");
-        }
-      }
-    } else {
-      // Log out
-      try {
-        await agoraChatClient.logout(true);
-        showLog("Logged out successfully");
-        setState(() {
-          isJoined = false;
-        });
-      } on ChatError catch (e) {
-        showLog("Logout failed, code: ${e.code}, desc: ${e.description}");
-      }
-    }
-  }
 }

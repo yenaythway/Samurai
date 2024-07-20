@@ -15,10 +15,15 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 
-##to add
-0)to test team
-1)gmail login
-2)phone number login
-3)user profile
-4)real time chatting
-5)real time video call
+## added features
+1) validation and error handling in textfield of sign in and sing up pages
+2) firebase login with email and password 
+3) all user page
+
+## Coming features
+0) to test team
+1) google login
+2) phone number login
+3) user profile
+4) real time chatting
+5) real time video call
