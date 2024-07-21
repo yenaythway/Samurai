@@ -5,7 +5,7 @@ import 'package:real_time_chatting/Providers/login_provider.dart';
 import 'package:real_time_chatting/Utils/extension.dart';
 import 'package:real_time_chatting/Utils/super_scaffold.dart';
 import 'package:real_time_chatting/Widgets/custom_buttom.dart';
-import 'package:real_time_chatting/Widgets/custom_text_form_field.dart';
+import 'package:real_time_chatting/Widgets/custom_text_field.dart';
 
 class NamePage extends StatelessWidget {
   const NamePage({super.key});
